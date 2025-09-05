@@ -1,9 +1,12 @@
 import express from "express"
 import dotenv from "dotenv"
 import ConnectDB from "./db/db.js";
-// import { PrismaClient } from "@prisma/client";
 import accountRouter from "./router/account.router.js";
 import userRouter from "./router/user.router.js";
+import addressRouter from "./router/address.router.js";
+import storeRouter from "./router/store.router.js";
+import storefeatureRouter from "./router/storefeature.router.js";
+import storeattributeRouter from "./router/storeattribute.router.js";
 
 dotenv.config({
     path:"./.env",
@@ -16,11 +19,12 @@ const app=express();
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
 
-// const prisma = new PrismaClient();
-
 app.use("/api/accounts", accountRouter);
 app.use("/api/users",userRouter);
-// app.use("/api/stores", storeRouter);
+app.use("/api/address",addressRouter);
+app.use("/api/stores", storeRouter);
+app.use("/api/storefeatures", storefeatureRouter);
+app.use("/api/storeattribute",storeattributeRouter)
 // app.use("/api/products", productRouter);
 // app.use("/api/orders", orderRouter);
 // app.use("/api/carts", cartRouter);
