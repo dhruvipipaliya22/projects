@@ -63,7 +63,7 @@ app.use("/api/shippingzone",shippingzoneRouter);
 app.use("/api/shippings",ShippingRouter);
 // app.use("/api/pages", pageRouter);
 
-app.get("/api",(req,res)=>{
+app.get("/",(req,res)=>{
     res.send("Welcome to e-commerce api");
 })
 app.listen(process.env.PORT,(err)=>{

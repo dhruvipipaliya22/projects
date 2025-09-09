@@ -1,28 +1,27 @@
-import { ProductImage } from "../models/productimage.model.js";
+import ProductImage from "../models/productimage.model.js"
 
 export const createProductimage = async (req, res) => {
     try {
-        const { productId, altText, width, height, order, isMainImage } = req.body;
-        if(!productId){
-            return res.status(400).json({error:"productId is required"});
-        }
+        const { productId, altText, width, height, fileSize, order, isMainImage } = req.body;
         if (!req.file) {
-            return res.status(400).json("Image file is required");
+            return res.status(401).json({ error: "Product Image file is required" });
         }
-        const fileUrl = `/uploads/${req.file.filename}`
-        const image = new ProductImage({ productId, url: fileUrl, altText, width, height, fileSize: req.file.size, order, isMainImage });
+        const url = `/uploads/${req.file.filename}`;
+        const filesize = req.file.size;
+        if (isMainImage === "true" || isMainImage === true) {
+            await ProductImage.updateMany({ productId }, { isMainImage: false });
+        }
+        const image = new ProductImage({ productId, url, altText, width, height, fileSize, order, isMainImage: isMainImage === "true" || isMainImage === true });
         await image.save();
         res.status(201).json(image);
     } catch (err) {
         res.status(400).json({ error: err.message });
     }
-    console.log("req.body:", req.body);
-console.log("req.file:", req.file);
 };
 
 export const getallProductImage = async (req, res) => {
     try {
-        const images = await ProductImage.find().populate("productId");
+        const images = await ProductImage.find({ productId: req.params.productId }).sort({ order: 1 });
         res.json(images);
     } catch (err) {
         res.status(400).json({ error: err.message });
@@ -31,7 +30,7 @@ export const getallProductImage = async (req, res) => {
 
 export const getProductImageById = async (req, res) => {
     try {
-        const image = await ProductImage.findById(req.params.id).populate("productId");
+        const image = await ProductImage.findById(req.params.id);
         if (!image) return res.status(404).json({ error: "Product image not found !!" });
         res.json(image);
     } catch (err) {
@@ -41,9 +40,20 @@ export const getProductImageById = async (req, res) => {
 
 export const updateProductImage = async (req, res) => {
     try {
-        const updated = await ProductImage.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        if (!updated) return res.status(404).json({ error: "Product image not found !!" });
-        res.json(updated);
+        const { productId, altText, width, height, order, isMainImage } = req.body;
+        if (req.file) {
+            updateData.url = `/uploads/${req.file.filename}`;
+            updateData.fileSize = req.file.size;
+        }
+        if (isMainImage === "true" || isMainImage === true) {
+            await ProductImage.updateMany({ productId }, { isMainImage: false });
+        }
+        const image = await ProductImage.findByIdAndUpdate(
+            req.params.id,
+            updateData,
+            { new: true, runValidators: true });
+        if (!image) return res.status(404).json({ error: "Product Image not found !!" });
+        res.json(image);
     } catch (err) {
         res.status(400).json({ error: err.message });
     }

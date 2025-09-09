@@ -1,4 +1,4 @@
-import { Tag } from "./teg.model.js";
+import { Tag } from "../models/teg.model.js";
 
 export const createTag = async(req,res)=>{
     try{

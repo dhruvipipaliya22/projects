@@ -4,15 +4,13 @@ import { upload } from "../middleware/multer.js";
 
 const ProductImageRouter = express.Router();
 
-ProductImageRouter.post("/",upload.single("image"),createProductimage);
+ProductImageRouter.get("/product/:productId",getallProductImage)
 
-ProductImageRouter.route("/")
-.get(getallProductImage)
-// .post(createProductimage)
+.post("/", upload.single("image"),createProductimage)
 
 ProductImageRouter.route("/:id")
 .get(getProductImageById)
-.put(updateProductImage)
+.put("/:id", upload.single("image"),updateProductImage)
 .delete(deleteProductImage)
 
 export default ProductImageRouter

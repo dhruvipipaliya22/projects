@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const productimageSchema = new mongoose.Schema({
     productId: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Product",
         required: true
     },
@@ -18,10 +18,10 @@ const productimageSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    isMainImage:{
-        type:Boolean,
-        default:false
+    isMainImage: {
+        type: Boolean,
+        default: false
     }
 }, { timestamps: true });
 
-export const ProductImage = mongoose.model("ProductImage", productimageSchema)
+export const ProductImage = mongoose.model("ProductImage", productimageSchema);
