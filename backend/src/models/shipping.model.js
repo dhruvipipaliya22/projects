@@ -10,9 +10,9 @@ const shippingSchema = new mongoose.Schema({
     storeId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Store",
-        require: true
+        required: true
     },
-    shippingMethodeId: {
+    shippingMethodId: {   
         type: mongoose.Schema.Types.ObjectId,
         ref: "ShippingMethod",
         required: true
@@ -22,26 +22,28 @@ const shippingSchema = new mongoose.Schema({
         unique: true,
         sparse: true
     },
-    carrier:{
-        type:String,
-        required:true
+    carrier: {
+        type: String,
+        required: true
     },
-    status:{
-        type:String,
-        enum:["PENDING","SHIPPED","DELIVERED","CANCELLED"],
-        default:"PENDING"
+    status: {
+        type: String,
+        enum: ["PENDING", "SHIPPED", "DELIVERED", "CANCELLED"],
+        default: "PENDING"
     },
-    cost:{
-        type:mongoose.Schema.Types.Decimal128,
-        required:true
+    cost: {
+        type: mongoose.Schema.Types.Decimal128,
+        required: true
     },
-    weight:{type:Number},
-    length:{type:Number},
-    width:{type:Number},
-    height:{type:Number},
-    shippedAt:{type:Date},
-    deliveredAt:{type:Date},
-    estimatedDelivery:{type:Date}
-},{timestamps:true});
+    weight: { type: Number },
+    length: { type: Number },
+    width: { type: Number },
+    height: { type: Number },
+    shippedAt: { type: Date },
+    deliveredAt: { type: Date },
+    estimatedDelivery: { type: Date },
 
-export const Shipping = mongoose.model("Shipping",shippingSchema);
+    trackingEvents: [{ type: mongoose.Schema.Types.ObjectId, ref: "ShippingTrackingEvent" }]
+}, { timestamps: true });
+
+export const Shipping = mongoose.model("Shipping", shippingSchema);

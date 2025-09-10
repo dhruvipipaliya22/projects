@@ -54,7 +54,7 @@ export const deleteShippingMethod=async(req,res)=>{
         const {id}=req.params;
         const deleted=await ShippingMethod.findByIdAndDelete(id);
         if(!deleted){
-            return res.status(404).json({message:" shipping method noy found !!"})
+            return res.status(404).json({message:" shipping method not found !!"})
         } 
         res.json({message:" shipping method deleted successfully !!"});
     }catch(err){

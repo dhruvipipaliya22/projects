@@ -24,6 +24,13 @@ import paymentRouter from "./router/payment.router.js";
 import shippingmethodRouter from "./router/shippingmethod.router.js";
 import shippingzoneRouter from "./router/shippingzone.router.js";
 import ShippingRouter from "./router/shipping.router.js";
+import TrackingEventRouter from "./router/shippingtrackingevent.router.js";
+import CouponRouter from "./router/coupon.router.js";
+import CouponProductRouter from "./router/couponproduct.router.js";
+import CouponCategoryRouter from "./router/couponcategory.router.js";
+import CouponUsageRouter from "./router/couponusage.router.js";
+import StoreAnalyticRouter from "./router/storeanalytic.router.js";
+import ProductAnalyticRouter from "./router/productanalytic.router.js";
 
 dotenv.config({
     path:"./.env",
@@ -33,10 +40,10 @@ ConnectDB();
 
 const app=express();
 
-app.use(express.urlencoded({extended:true}));
 app.use(express.json());
+app.use(express.urlencoded({extended:true}));
 
-app.use("/uploads",express.static("uploads"));
+app.use("/uploads", express.static("uploads"));
 
 app.use("/api/accounts", accountRouter);
 app.use("/api/users",userRouter);
@@ -61,6 +68,13 @@ app.use("/api/payments", paymentRouter);
 app.use("/api/shippingmethod",shippingmethodRouter);
 app.use("/api/shippingzone",shippingzoneRouter);
 app.use("/api/shippings",ShippingRouter);
+app.use("/api/shippingtrackingevents",TrackingEventRouter);
+app.use("/api/coupons", CouponRouter);
+app.use("/api/couponproducts", CouponProductRouter);
+app.use("/api/couponcategories",CouponCategoryRouter);
+app.use("/api/couponusages",CouponUsageRouter);
+app.use("/api/storeanalytics",StoreAnalyticRouter);
+app.use("/api/productanalytics",ProductAnalyticRouter);
 // app.use("/api/pages", pageRouter);
 
 app.get("/",(req,res)=>{

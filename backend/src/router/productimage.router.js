@@ -6,11 +6,10 @@ const ProductImageRouter = express.Router();
 
 ProductImageRouter.get("/product/:productId",getallProductImage)
 
-.post("/", upload.single("image"),createProductimage)
+ProductImageRouter.post("/", upload.single("image"), createProductimage)
+ProductImageRouter.put("/:id", upload.single("image"), updateProductImage)
 
-ProductImageRouter.route("/:id")
-.get(getProductImageById)
-.put("/:id", upload.single("image"),updateProductImage)
-.delete(deleteProductImage)
+ProductImageRouter.get("/:id",getProductImageById)
+ProductImageRouter.delete("/:id",deleteProductImage)
 
 export default ProductImageRouter

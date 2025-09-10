@@ -1,17 +1,26 @@
-import ProductImage from "../models/productimage.model.js"
+import { ProductImage } from "../models/productimage.model.js";
 
 export const createProductimage = async (req, res) => {
     try {
-        const { productId, altText, width, height, fileSize, order, isMainImage } = req.body;
+        const { productId, altText, width, height, order, isMainImage } = req.body;
         if (!req.file) {
-            return res.status(401).json({ error: "Product Image file is required" });
+            return res.status(400).json({ error: "Product Image file is required" });
         }
         const url = `/uploads/${req.file.filename}`;
-        const filesize = req.file.size;
+        const fileSize = req.file.size;
         if (isMainImage === "true" || isMainImage === true) {
             await ProductImage.updateMany({ productId }, { isMainImage: false });
         }
-        const image = new ProductImage({ productId, url, altText, width, height, fileSize, order, isMainImage: isMainImage === "true" || isMainImage === true });
+        const image = new ProductImage({
+            productId,
+            url,
+            altText,
+            width,
+            height,
+            fileSize,
+            order,
+            isMainImage: isMainImage === "true" || isMainImage === true,
+        });
         await image.save();
         res.status(201).json(image);
     } catch (err) {
@@ -41,6 +50,14 @@ export const getProductImageById = async (req, res) => {
 export const updateProductImage = async (req, res) => {
     try {
         const { productId, altText, width, height, order, isMainImage } = req.body;
+        let updateData = {
+            productId,
+            altText,
+            width,
+            height,
+            order,
+            isMainImage: isMainImage === "true" || isMainImage === true,
+        };
         if (req.file) {
             updateData.url = `/uploads/${req.file.filename}`;
             updateData.fileSize = req.file.size;
@@ -51,7 +68,8 @@ export const updateProductImage = async (req, res) => {
         const image = await ProductImage.findByIdAndUpdate(
             req.params.id,
             updateData,
-            { new: true, runValidators: true });
+            { new: true, runValidators: true }
+        );
         if (!image) return res.status(404).json({ error: "Product Image not found !!" });
         res.json(image);
     } catch (err) {
@@ -65,6 +83,6 @@ export const deleteProductImage = async (req, res) => {
         if (!deleted) return res.status(404).json({ error: "Product image not found !!" });
         res.json({ message: "Product image deleted Successfully !!" });
     } catch (err) {
-        res.status(400).json({ error: err.message })
+        res.status(400).json({ error: err.message });
     }
 };
