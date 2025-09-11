@@ -1,0 +1,63 @@
+import mongoose from "mongoose";
+
+const CartEventSchema = new mongoose.Schema({
+    storeId:{
+        type:String,
+        required:true
+    },
+    userId:{type:String},
+    sessionId:{type:String},
+    productId:{
+        type:String,
+        required:true
+    },
+    variantId:{type:String},
+    action:{
+        type:String,
+        enum:["add","remove","update","abandon"],
+        required:true
+    },
+    quantity:{
+        type:Number,
+        required:true
+    },
+    price:{
+        type:Number,
+        required:true
+    },
+    totalValue:{
+        type:Number,
+        required:true
+    },
+    ipAddress:{
+        type:String,
+        required:true
+    },
+    userAgent:{type:String},
+    country:{type:String},
+    countryCode:{type:String},
+    deviceType:{
+        type:String,
+        enum:["DESKTOP","MOBILE","TABLET","LAPTOP"],
+        default:"DESKTOP"
+    },
+    browser:{type:String},
+    referrer:{type:String},
+    source:{type:String},
+    medium:{type:String},
+    campaign:{type:String},
+    cartTotalBefore:{
+        type:Number,
+        default:0
+    },
+    cartTotalAfter:{
+        type:Number,
+        default:0
+    },
+    cartItemsCount:{
+        type:Number,
+        default:0
+    }
+},{timestamps:{createdAt:"createdAt"}});
+
+export const CartEvent = mongoose.model("CartEvent",CartEventSchema);

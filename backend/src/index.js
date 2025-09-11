@@ -31,6 +31,14 @@ import CouponCategoryRouter from "./router/couponcategory.router.js";
 import CouponUsageRouter from "./router/couponusage.router.js";
 import StoreAnalyticRouter from "./router/storeanalytic.router.js";
 import ProductAnalyticRouter from "./router/productanalytic.router.js";
+import ProductViewRouter from "./router/productview.router.js";
+import SessionTrackingRouter from "./router/sessiontracking.router.js";
+import CartEventRouter from "./router/cartevent.router.js";
+import WishlistEventRouter from "./router/wishlistevent.router.js";
+import BannerRouter from "./router/banner.router.js";
+import BannerTargetRoleRouter from "./router/bannertargetrole.router.js";
+import BannerTargetAudienceRouter from "./router/bannertargetaudience.router.js";
+import PageRouter from "./router/page.router.js";
 
 dotenv.config({
     path:"./.env",
@@ -75,7 +83,14 @@ app.use("/api/couponcategories",CouponCategoryRouter);
 app.use("/api/couponusages",CouponUsageRouter);
 app.use("/api/storeanalytics",StoreAnalyticRouter);
 app.use("/api/productanalytics",ProductAnalyticRouter);
-// app.use("/api/pages", pageRouter);
+app.use("/api/productviews",ProductViewRouter);
+app.use("/api/sessiontracking",SessionTrackingRouter);
+app.use("/api/cartevents",CartEventRouter);
+app.use("/api/wishlistevents",WishlistEventRouter);
+app.use("/api/banner",BannerRouter);
+app.use("/api/bannertargetroles",BannerTargetRoleRouter);
+app.use("/api/bannertargetaudience",BannerTargetAudienceRouter);
+app.use("/api/pages",PageRouter);
 
 app.get("/",(req,res)=>{
     res.send("Welcome to e-commerce api");
