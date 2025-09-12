@@ -3,12 +3,8 @@ import { CartItem } from "../models/cartitem.model.js";
 export const createCartItem = async (req, res) => {
     try {
         const { cartId, productId, variantId, quantity, priceAtAddition } = req.body;
-        if (!cartId || !productId || !priceAtAddition) {
-            return res.status(400).json({ error: "cartId, productId and priceAtAddition are required" });
-        }
         const total = quantity * priceAtAddition;
         const cartItem = new CartItem({ cartId, productId, variantId, quantity, priceAtAddition, total });
-        await cartItem.save();
         res.status(201).json(cartItem);
     } catch (err) {
         if (err.code === 11000) {
@@ -20,7 +16,7 @@ export const createCartItem = async (req, res) => {
 
 export const getAllCartItems = async (req, res) => {
     try {
-        const cartItem = await CartItem.find().populate("productId").populate("variantId");
+        const cartItem = await CartItem.find().populate("cartId").populate("productId").populate("variantId");
         res.json(cartItem);
     } catch (err) {
         res.status(400).json({ error: err.message });
@@ -29,7 +25,7 @@ export const getAllCartItems = async (req, res) => {
 
 export const getCartItemById = async (req, res) => {
     try {
-        const cartItem = await CartItem.findById(req.params.id).populate("productId").populate("variantId");
+        const cartItem = await CartItem.findById(req.params.id).populate("cartId").populate("productId").populate("variantId");
         if (!cartItem) return res.status(404).json({ error: "CartItem not found !!!" });
         res.json(cartItem);
     } catch (err) {
@@ -40,15 +36,9 @@ export const getCartItemById = async (req, res) => {
 export const updateCartItem = async (req, res) => {
   try {
     const { quantity, priceAtAddition } = req.body;
-    let updateData = { ...req.body };
-
-    if (quantity && priceAtAddition) {
-      updateData.total = quantity * priceAtAddition;
-    }
-
-    const updated = await CartItem.findByIdAndUpdate(req.params.id, updateData, { new: true });
+    const total = quantity * priceAtAddition;
+    const updated = await CartItem.findByIdAndUpdate(req.params.id, {...req.body,total}, { new: true,runValidators:true});
     if (!updated) return res.status(404).json({ error: "CartItem not found !!" });
-
     res.json(updated);
   } catch (err) {
     res.status(400).json({ error: err.message });

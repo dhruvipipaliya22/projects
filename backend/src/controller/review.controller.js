@@ -2,28 +2,21 @@ import { Review } from "../models/review.model.js";
 
 export const createReview = async(req,res)=>{
     try{
-          console.log("req.body =>", req.body);
-        console.log("productId =>", productId);
-        console.log("tagId =>", tagId);
-        console.log("value =>", value);
-        const{productId, userId, rating, title, comment}=req.body
-        if(!productId || !userId || !rating){
-            return res.status(400).json({error:"productId, userId and rating are required"});
-        }
-        const review = new Review({productId, tagId, value});
-        await review.save();
+        const review = await Review.create(req.body);
         res.status(201).json(review);
     }catch(err){
-        if(err.code === 11000){
-            return res.status(400).json({error:"User has already reviewed this product"});
-        }
         res.status(400).json({error:err.message});
     }
 };
 
 export const getAllReview = async(req,res)=>{
     try{
-        const reviews=await Review.find().populate("productid","name price").populate("userId","name email");
+        const {productId, userId, status}=req.query;
+        const filter={};
+        if(productId) filter.productId=productId;
+        if(userId) filter.userId=userId;
+        if(status) filter.status=status;
+        const reviews=await Review.find(filter).populate("productId","name price").populate("userId","name email").sort({createdAt: -1});
         res.json(reviews);
     }catch(err){
         res.status(400).json({error:err.message});
@@ -32,7 +25,7 @@ export const getAllReview = async(req,res)=>{
 
 export const getReviewById = async(req,res)=>{
     try{
-        const review = await Review.findById(req.params.id);
+        const review = await Review.findById(req.params.id).populate("userId","name email").populate("productId","name price");
         if(!review) return res.status(404).json({error:"Review not found !!"});
         res.json(review);
     }catch(err){
@@ -44,7 +37,7 @@ export const updateReview = async(req,res)=>{
     try{
         const updated =await Review.findByIdAndUpdate(req.params.id,req.body,{new:true});
         if(!updated) return res.status(404).json({error:"Review not found !!"});
-        res.json(updated)
+        res.json(updated);
     }catch(err){
         res.status(400).json({error:err.message});
     }

@@ -39,6 +39,11 @@ import BannerRouter from "./router/banner.router.js";
 import BannerTargetRoleRouter from "./router/bannertargetrole.router.js";
 import BannerTargetAudienceRouter from "./router/bannertargetaudience.router.js";
 import PageRouter from "./router/page.router.js";
+import HeroSlideRouter from "./router/heroslide.router.js";
+import TrendingCategoryRouter from "./router/trendingcategory.router.js";
+import TrendingProductRouter from "./router/trendingproduct.router.js";
+import TestimonialRouter from "./router/testimonial.router.js";
+import NotificationRouter from "./router/notification.router.js";
 
 dotenv.config({
     path:"./.env",
@@ -68,7 +73,7 @@ app.use("/api/tags",tagRouter);
 app.use("/api/productstag",producttagRouter);
 app.use("/api/reviews", reviewRouter);
 app.use("/api/carts", cartRouter);
-app.use("/api/cartsitem", cartItemRouter);
+app.use("/api/cartsitems", cartItemRouter);
 app.use("/api/wishlistitems",WishlistItemRouter);
 app.use("/api/orders", orderRouter);
 app.use("/api/orderitems",orderitemRouter);
@@ -91,10 +96,19 @@ app.use("/api/banner",BannerRouter);
 app.use("/api/bannertargetroles",BannerTargetRoleRouter);
 app.use("/api/bannertargetaudience",BannerTargetAudienceRouter);
 app.use("/api/pages",PageRouter);
+app.use("/api/herosliders",HeroSlideRouter);
+app.use("/api/trendingcategories",TrendingCategoryRouter);
+app.use("/api/trendingproducts",TrendingProductRouter);
+app.use("/api/testimonials",TestimonialRouter);
+app.use("/api/notifications",NotificationRouter);
 
 app.get("/",(req,res)=>{
     res.send("Welcome to e-commerce api");
-})
+});
+
+// app.listen(process.env.PORT,(err)=>{
+//     !err ? console.log(`server started on port ${process.env.PORT}`) : null;
+// });
 app.listen(process.env.PORT,(err)=>{
-    !err ? console.log(`server started on port ${process.env.PORT}`) : null;
+    !err ? console.log(`server started on port ${process.env.PORT}`) : null
 });

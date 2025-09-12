@@ -1,20 +1,8 @@
-import mongoose from "mongoose";
 import { Cart } from "../models/cart.model.js";
 
 export const createCart = async (req, res) => {
     try {
-        const { userId, storeId, couponId, sessionId, expiresAt, itemCount, subtotal, total } = req.body;
-        if (!mongoose.Types.ObjectId.isValid(userId)) {
-            return res.status(400).json({ error: "Invalid userId" });
-        }
-        if (!mongoose.Types.ObjectId.isValid(storeId)) {
-            return res.status(400).json({ error: "Invalid storeId" });
-        }
-        if (!storeId || !expiresAt) {
-            return res.status(400).json({ error: "storeId and expiresAt are required" });
-        }
-        const cart = new Cart({ userId, storeId, couponId, sessionId, expiresAt, itemCount, subtotal, total });
-        await cart.save();
+        const cart = await Cart.create(req.body);
         res.status(201).json(cart);
     } catch (err) {
         res.status(400).json({ error: err.message });
@@ -23,7 +11,7 @@ export const createCart = async (req, res) => {
 
 export const getAllCarts = async (req, res) => {
     try {
-        const carts = await Cart.find().populate("userId").populate("storeId").populate("couponId");
+        const carts = await Cart.find().populate("userId" , "name email").populate("storeId", "name").populate("couponId","code discount").sort({createdAt:1});
         res.json(carts);
     } catch (err) {
         res.status(400).json({ error: err.message });
@@ -32,7 +20,7 @@ export const getAllCarts = async (req, res) => {
 
 export const getCartById = async (req, res) => {
     try {
-        const cart = await Cart.findById(req.params.id).populate("userId").populate("storeId").populate("couponId");
+        const cart = await Cart.findById(req.params.id).populate("userId","name email").populate("storeId","name").populate("couponId","code discount");
         if (!cart) return res.status(404).json({ error: "Cart not found !!!" });
         res.json(cart);
     } catch (err) {

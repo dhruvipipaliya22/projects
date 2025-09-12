@@ -30,4 +30,9 @@ const cartSchema = new mongoose.Schema({
     }
 },{timestamps:true});
 
+cartSchema.index({userId:1});
+cartSchema.index({storeId:1});
+cartSchema.index({sessionId:1});
+cartSchema.index({expiresAt:1});
+
 export const Cart= mongoose.model("Cart",cartSchema);
